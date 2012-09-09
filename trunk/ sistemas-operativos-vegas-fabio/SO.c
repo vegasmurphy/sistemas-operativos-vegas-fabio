@@ -83,6 +83,21 @@ void imprimir_punto_B(){
 		char out[BUFFSIZE+1];
 	char buffer[BUFFSIZE+1]; 
 	
+	//Fecha y hora actual
+	time_t *timer;
+	time_t t;
+	timer=&t;
+	time(timer);
+		printf("\nTiempo y fecha actual: %s",ctime(timer));
+		
+	//Nombre de la maquina
+	lectura_archivo("/proc/sys/kernel/hostname",buffer,0);
+	strcpy(out,buffer);
+	printf("Nombre de la Maquina: %s\n\n",out);	
+		
+		
+	
+	
 	//imprimo CPU Model
 	lectura_archivo("/proc/cpuinfo",buffer,4);
 	strcpy(out,buffer+13);
