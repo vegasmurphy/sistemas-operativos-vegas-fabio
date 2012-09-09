@@ -16,10 +16,71 @@ void imprimir_procesos();
 void imprimir_Boot_time();
 void imprimir_info_memoria();
 void imprimir_lista_promedio_cargas();
+void imprimir_peticiones_disco();
+void imprimir_punto_B();
+void imprimir_punto_C();
+void imprimir_punto_D(int,int);
+
+
 
 int main(int argc, char *argv[]) 
 { 	
-	char out[BUFFSIZE+1];
+	
+	
+	
+	if(argc==1){
+	imprimir_punto_B();
+	}
+	
+	/*Punto C. Imprime con -s 
+	 * los datos solicitados
+	 * */
+	 else{
+		if((argc==2) && (!strcmp(argv[1],"-s"))){
+			
+			imprimir_punto_C();
+					
+			}
+	
+	/*
+	 * Punto D todas las llamadas a funciones van dentro del bucle for el cual lo
+	 * imprime con el retardo correspondiente
+	 */
+		else{
+			if ((argc==4) && (!strcmp(argv[1],"-l")) && (atoi(argv[3])>0) && (atoi(argv[2])>0) ){											//Pregunta si la cantidad de parametros que recibe 'main' es 4
+									//Pregunta si el parametro ubicado en la posicion 1 del argv[] es'-l'
+			
+			imprimir_punto_D(atoi(argv[2]),atoi(argv[3]));
+		
+														}
+			
+			else{
+					printf("Argumentos invalidos\nlos comandos validos son:\n-s\n-l a b donde a es el delay y b el tiempo de ejecucion\n");
+				}
+			}
+
+		}
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+ 
+/*lee el archivo y imprime las lineas pasadas en un arreglo
+ * recibe como parametro un arreglo el cual contiene en 
+ * primer lugar la cantidad de datos del arreglo
+*/
+
+void imprimir_punto_B(){
+		char out[BUFFSIZE+1];
 	char buffer[BUFFSIZE+1]; 
 	
 	//imprimo CPU Model
@@ -35,59 +96,45 @@ int main(int argc, char *argv[])
 	//imprimo version kernel
 	lectura_archivo("/proc/version_signature",buffer,0);
 	printf("Version kernel: %s",buffer);
-	
-	//imprimir_tiempo();
-	/*Punto C. Imprime con -s 
-	 * los datos solicitados
-	 * */
-	if(argc>1){
-		if(!strcmp(argv[1],"-s")){
+	imprimir_tiempo();
+	}
+
+void imprimir_punto_C(){
+			imprimir_punto_B();
 			imprimir_idleTime();
 			imprimir_UserTime();
 			imprimir_System_Time();
 			imprimir_cambios_contexto();
 			imprimir_procesos();
 			imprimir_Boot_time();
-		}
+	
+	
 	}
 	
-	/*
-	 * Punto D todas las llamadas a funciones van dentro del bucle for el cual lo
-	 * imprime con el retardo correspondiente
-	 */
-	if (argc==4){											//Pregunta si la cantidad de parametros que recibe 'main' es 4
-		if(!strcmp(argv[1],"-l")){							//Pregunta si el parametro ubicado en la posicion 1 del argv[] es'-l'
+	
+	
+void imprimir_punto_D(int delay,int tiempo){
 			int i=0;
 			
-			imprimir_idleTime();
-			imprimir_UserTime();
-			imprimir_System_Time();
-			imprimir_cambios_contexto();
-			imprimir_procesos();
-			imprimir_Boot_time();
-			
-			for (i=0;i<atoi(argv[3])/ atoi(argv[2]);i++){
-				
+				imprimir_punto_C();
+				imprimir_info_memoria();
+				imprimir_lista_promedio_cargas();
+				imprimir_peticiones_disco();
+			for (i=0;i<(tiempo/delay);i++){
+				printf("---delay %i segundo/s ---\n",delay);
+				sleep(delay);
 				//Aca van las llamadas a funciones
 				imprimir_info_memoria();
 				imprimir_lista_promedio_cargas();
+				imprimir_peticiones_disco();
 				
 				
-			//	printf("delay %i \n",atoi(argv[2]));
-				sleep(atoi(argv[2]));
-			}
-		}
-	}
+				
+				
+			
+														}
 	
-	return 0;
-}
-
- 
-/*lee el archivo y imprime las lineas pasadas en un arreglo
- * recibe como parametro un arreglo el cual contiene en 
- * primer lugar la cantidad de datos del arreglo
-*/
-
+	}
 void lectura_archivo(char nombre_archivo[100],char buffer[BUFFSIZE+1],int j)
 {														
 	char lectura [100][BUFFSIZE+1];
@@ -324,3 +371,49 @@ void imprimir_lista_promedio_cargas()
 	printf("Promedio de carga en el último minuto: %.2f \n", promedio);
 	fclose(fd);
 }
+
+void imprimir_peticiones_disco(){
+char lectura [100][BUFFSIZE+1];
+	FILE *fd;
+	fd= fopen("/proc/diskstats","r");
+	int i=0;
+	char buffer[BUFFSIZE+1];
+	int acumulador=0;
+	while ((fgets(buffer,BUFFSIZE+1,fd)!=NULL) & (i<100))
+		{
+		
+			if ((!strncmp(buffer+16," ",1)) & (!strncmp(buffer+13,"sd",2)))
+				{//printf("%s",buffer+13);
+				acumulador += atoi(buffer+17);
+				int espacios=0;
+				int i=0;
+				while(espacios<4){
+					if (*(buffer+17+i)==' ')
+						{espacios++;
+						
+							}
+					i++;
+					}
+					acumulador+=atoi(buffer+17+i);
+					//printf("%i \n",atoi(buffer+17+i));
+				//printf("%i \n",acumulador);
+				strcpy(lectura[i],buffer);
+				
+				}
+			
+		
+		
+		i=i+1;
+		}
+		printf("Peticiones a Disco: %i \n",acumulador);
+	fclose(fd);
+	//char out[BUFFSIZE+1];
+	//strcpy(out,lectura[0]+13);
+	
+	//printf("%s \n",out);
+	
+	
+	
+	
+	
+	}
