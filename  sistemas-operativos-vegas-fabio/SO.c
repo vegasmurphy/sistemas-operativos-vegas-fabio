@@ -22,7 +22,6 @@ void imprimir_punto_C();
 void imprimir_punto_D(int,int);
 
 
-
 int main(int argc, char *argv[]) 
 { 	
 	if(argc==1){
@@ -49,7 +48,6 @@ int main(int argc, char *argv[])
 				printf("Argumentos invalidos\nlos comandos validos son:\n-s\n-l a b donde a es el delay y b el tiempo de ejecucion\n");
 			}
 		}
-
 	}
 	return 0;
 }
@@ -74,9 +72,6 @@ void imprimir_punto_B(){
 		lectura_archivo("/proc/sys/kernel/hostname",buffer,0);
 		strcpy(out,buffer);
 		printf("Nombre de la Maquina: %s\n\n",out);	
-		
-		
-	
 	
 		//imprimo CPU Model
 		lectura_archivo("/proc/cpuinfo",buffer,4);
@@ -96,6 +91,8 @@ void imprimir_punto_B(){
 
 void imprimir_punto_C(){
 		imprimir_punto_B();
+		
+//		float tiempos [4];
 		imprimir_idleTime();
 		imprimir_UserTime();
 		imprimir_System_Time();
@@ -139,123 +136,82 @@ void lectura_archivo(char nombre_archivo[100],char buffer[BUFFSIZE+1],int j)
 		strcpy(buffer,lectura[j]);
 }
 
+
+int obtener_valor_tiempo(FILE *a, char tiempo[][BUFFSIZE+1],int posicion_dato){
+		int i=0;
+		char valor[BUFFSIZE+1];
+		for(i=0; i<posicion_dato+1; i++){
+				fscanf(a, "%s", tiempo[i]);
+		}
+		strcpy(valor,tiempo[posicion_dato]);
+		return atoi(valor);
+}
+
+void procesar_tiempos(int tiempo, int valores[4])
+{
+	valores[0]= tiempo / (86400);
+	valores[1]=(tiempo % 86400)/3600;
+	valores[2]=(tiempo % 3600)/60;
+	valores[3]=(tiempo % 60);
+}
+
 void imprimir_tiempo()
 {
 		FILE *fd;
 		fd= fopen("/proc/uptime","r");
-		int i=0;
-	
-		char buffer[BUFFSIZE+1]; 
-		fgets(buffer,BUFFSIZE+1,fd);
-		for (i=0;i<BUFFSIZE+1;i++){
-			if (buffer[i]==' ')
-			{break;}
-		}
-		char salida[i];
-		strcpy(salida,buffer);
-		float s;
-		s=atof(salida);
+		char tiempo[4][BUFFSIZE+1];
+		int valor_tiempo;
+		int datos_tiempos[4];
 		
+		valor_tiempo = obtener_valor_tiempo(fd,tiempo,0);
 		fclose(fd);
-	
-		int ss;
-		ss=(int)s;
-		int dias,horas,minutos,segundos;
-		dias= ss/(86400);
-		horas=(ss % 86400)/3600;
-		minutos=(ss % 3600)/60;
-		segundos=(ss % 60);
-		printf("Uptime: %iD:%iH:%iM:%iS \n",dias,horas,minutos,segundos);
+		procesar_tiempos(valor_tiempo, datos_tiempos);
+		printf("Uptime: %iD:%iH:%iM:%iS \n",datos_tiempos[0],datos_tiempos[1],datos_tiempos[2],datos_tiempos[3]);
 }
 
 void imprimir_idleTime()
 {	
 		FILE *fd;
 		fd= fopen("/proc/uptime","r");
-		int i=0;
-	
-		char buffer[BUFFSIZE+1]; 
-		fgets(buffer,BUFFSIZE+1,fd);
-		for (i=0;i<BUFFSIZE+1;i++){
-			if (buffer[i]==' ')
-			{break;}
-		}
+		char tiempo[4][BUFFSIZE+1];
+		int valor_tiempo;
+		int datos_tiempos[4];
 		
-		char salida[100];
-		strcpy(salida,buffer+i);
-		float s;
-		s=atof(salida);
-	
+		valor_tiempo = obtener_valor_tiempo(fd,tiempo,1);
 		fclose(fd);
+		procesar_tiempos(valor_tiempo, datos_tiempos);
 	
-		int ss;
-		ss=(int)s;
-		int dias,horas,minutos,segundos;
-		dias= ss/(86400);
-		horas=(ss % 86400)/3600;
-		minutos=(ss % 3600)/60;
-		segundos=(ss % 60);
-		printf("Idle Time: %iD:%iH:%iM:%iS \n",dias,horas,minutos,segundos);
+		printf("Idle Time: %iD:%iH:%iM:%iS \n",datos_tiempos[0],datos_tiempos[1],datos_tiempos[2],datos_tiempos[3]);
 }
 
 void imprimir_UserTime(){
+	
 		FILE *fd;
 		fd= fopen("/proc/stat","r");
-		int i=0;
-	
-		char buffer[BUFFSIZE+1]; 
-		fgets(buffer,BUFFSIZE+1,fd);
-		for (i=0;i<BUFFSIZE+1;i++){
-			if (buffer[i]==' ')
-			{break;}
-		}
+		char tiempo[4][BUFFSIZE+1];
+		int valor_tiempo;
+		int datos_tiempos[4];
 		
-		char salida[100];
-		strcpy(salida,buffer+i);
-		float s;
-		s=atof(salida);
+		valor_tiempo = obtener_valor_tiempo(fd,tiempo,1);
 		fclose(fd);
+		procesar_tiempos(valor_tiempo/100, datos_tiempos);
 	
-		int ss;
-		ss=(int)s/100;
-		int dias,horas,minutos,segundos;
-		dias= ss/(86400);
-		horas=(ss % 86400)/3600;
-		minutos=(ss % 3600)/60;
-		segundos=(ss % 60);
-		printf("User Time: %iD:%iH:%iM:%iS \n",dias,horas,minutos,segundos);
+		printf("User Time: %iD:%iH:%iM:%iS \n",datos_tiempos[0],datos_tiempos[1],datos_tiempos[2],datos_tiempos[3]);
 }
 	
 void imprimir_System_Time()
-{
+{	
 		FILE *fd;
 		fd= fopen("/proc/stat","r");
-		int i=0;
-	
-		char buffer[BUFFSIZE+1]; 
-		fgets(buffer,BUFFSIZE+1,fd);
-		int espacios=0;
-		for (i=0;i<BUFFSIZE+1;i++){
-			if (buffer[i]==' ')
-			{
-				espacios++;
-				if (espacios==3){break;}
-			}
-		}
-		char salida[100];
-		strcpy(salida,buffer+i);
-		float s;
-		s=atof(salida);
+		char tiempo[4][BUFFSIZE+1];
+		int valor_tiempo;
+		int datos_tiempos[4];
+		
+		valor_tiempo = obtener_valor_tiempo(fd,tiempo,3);
 		fclose(fd);
+		procesar_tiempos(valor_tiempo/100, datos_tiempos);
 	
-		int ss;
-		ss=(int)s/100;
-		int dias,horas,minutos,segundos;
-		dias= ss/(86400);
-		horas=(ss % 86400)/3600;
-		minutos=(ss % 3600)/60;
-		segundos=(ss % 60);
-		printf("System Time: %iD:%iH:%iM:%iS \n",dias,horas,minutos,segundos);
+		printf("System Time: %iD:%iH:%iM:%iS \n",datos_tiempos[0],datos_tiempos[1],datos_tiempos[2],datos_tiempos[3]);
 }
 
 void imprimir_cambios_contexto(){
@@ -403,8 +359,5 @@ void imprimir_peticiones_disco()
 		printf("Peticiones a Disco: %i \n",acumulador);
 	
 		fclose(fd);
-	//char out[BUFFSIZE+1];
-	//strcpy(out,lectura[0]+13);
-	
-	//printf("%s \n",out);
 }
+
