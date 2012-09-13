@@ -334,7 +334,7 @@ void imprimir_peticiones_disco()
 		
 		while ((fgets(buffer,BUFFSIZE+1,fd)!=NULL) & (i<100))
 		{
-			if ((!strncmp(buffer+16," ",1)) & ((!strncmp(buffer+13,"sd",2))||(!strncmp(buffer+13,"hd",2))))
+			if ((!strncmp(buffer+17," ",1)) & ((!strncmp(buffer+13,"sd",2))||(!strncmp(buffer+13,"hd",2))))
 			{	
 				//printf("%s",buffer+13);
 				acumulador += atoi(buffer+17);
