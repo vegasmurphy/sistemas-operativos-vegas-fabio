@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <string.h>
-#include <sys/types.h> /* pid_t */
-#include <errno.h>   /* errno */
-#include <wchar.h>
-#define BUFFSIZE 256
+
 #include "cd.c"
 void Creador_Prompt();
 void Ingresar_Comando(char* [5]);
@@ -21,7 +13,8 @@ int main(int argc,char *argv[]){
 	while(1)
 		{	
 			Creador_Prompt();
-			Ingresar_Comando(argv);printf("%s %s ----------",argv[0],argv[1]);
+			Ingresar_Comando(argv);
+			//printf("%s %s ----------",argv[0],argv[1]);
 		}
 		
 		
@@ -31,29 +24,18 @@ int main(int argc,char *argv[]){
 void Creador_Prompt(){
 	
 	//obtencion de hostname y usuario para prompt
-	char buffer[BUFFSIZE+1];
-	char user[100];
+	//char buffer[BUFFSIZE+1];
+	char *user;
 	char hostname[100];
 	gethostname(hostname,100);
-	FILE *f;
-	system("env >/tmp/env");
-	f = fopen("/tmp/env","r"); 
-
-	
-	while(!feof(f))
-	{	
-		fgets(buffer,BUFFSIZE+1,f);
-		if (!strncmp(buffer,"USER=",5))
-		{
-			strcpy(user,buffer+5);
-		}
-	}
-		int size;
-		size=strlen(hostname);
-		char user1[size];
-		strcpy(user1,user);
-		strcat(user1,hostname);
-		printf("\n%s@ ",user1);
+	//printf("%s\n",getenv("USER"));
+	user=getenv("USER");
+	int size;
+	size=strlen(user);
+	char user1[size];
+	strncpy(user1,user,size);
+	strcat(user1,hostname);
+	printf("\n%s@%s  %s ",user,hostname,getcwd(NULL,0));
 }
 
 
@@ -75,7 +57,7 @@ void Ingresar_Comando(char *comando[5])
 		i++;
 	}	
 	while(h<i){
-		printf("%i  --------   %s\n", h, comando[h]);
+		//printf("%i  --------   %s\n", h, comando[h]);
 		h++;
 	}
 		
@@ -88,7 +70,7 @@ void Verificar_Comando_Ingresado(char *comando[5])
 	
 	int valor;
 	valor = Evaluar_Comando(comando);
-	printf("valor: %i\n",valor);
+	//printf("valor: %i\n",valor);
 	
 	switch (valor){
 		case 1:
@@ -119,7 +101,7 @@ int Evaluar_Comando(char *comando[5]){
 				else{
 					if(!strncmp(comando[0],"/",1))
 						{
-						printf("%s***************",comando[0]);
+						//printf("%s***************",comando[0]);
 						return 1;
 						}
 					else{
