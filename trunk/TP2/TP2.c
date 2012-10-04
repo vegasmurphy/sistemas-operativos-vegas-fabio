@@ -7,14 +7,14 @@
 #include <errno.h>   /* errno */
 #include <wchar.h>
 #define BUFFSIZE 256
-
+#include "cd.c"
 void Creador_Prompt();
 void Ingresar_Comando(char* [5]);
 void Verificar_Comando_Ingresado(char* [5]);
 int Evaluar_Comando(char* [5]);
-void Atender_Ruta_Absoluta(char [5]);
-void Atender_Ruta_Relativa(char [5]);
-void Atender_Comando(char [5]);
+void Atender_Ruta_Absoluta(char* [5]);
+void Atender_Ruta_Relativa(char* [5]);
+void Atender_Comando(char* [5]);
 
 int main(int argc,char *argv[]){
 	
@@ -92,16 +92,16 @@ void Verificar_Comando_Ingresado(char *comando[5])
 	
 	switch (valor){
 		case 1:
-			Atender_Ruta_Absoluta(comando[5]);
+			Atender_Ruta_Absoluta(comando);
 			break;
 		case 2:
-			Atender_Ruta_Relativa(comando[5]);
+			Atender_Ruta_Relativa(comando);
 			break;
 		case 3:
-			Atender_Comando(comando[5]);
+			Atender_Comando(comando);
 			break;
 		case 4:
-			Realizar_cd(comando[5]);
+			Realizar_cd(comando);
 			break;
 	}
 }
@@ -131,7 +131,7 @@ int Evaluar_Comando(char *comando[5]){
 			}
 }
 
-void Atender_Ruta_Relativa(char comando[5]){
+void Atender_Ruta_Relativa(char* comando[5]){
 	pid_t pid_relativo;
 	
 	pid_relativo = fork();
@@ -153,7 +153,7 @@ void Atender_Ruta_Relativa(char comando[5]){
 }
 
 
-void Atender_Ruta_Absoluta(char comando[5]){
+void Atender_Ruta_Absoluta(char* comando[5]){
 	pid_t pid_absoluto;
 	
 	pid_absoluto = fork();
@@ -174,7 +174,7 @@ void Atender_Ruta_Absoluta(char comando[5]){
 	}
 }
 
-void Atender_Comando(char comando[5]){	
+void Atender_Comando(char* comando[5]){	
 	pid_t pid_comando;
 	
 	pid_comando = fork();
