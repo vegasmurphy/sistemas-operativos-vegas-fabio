@@ -100,23 +100,35 @@ void Verificar_Comando_Ingresado(char *comando[5])
 		case 3:
 			Atender_Comando(comando[5]);
 			break;
+		case 4:
+			Realizar_cd(comando[5]);
+			break;
 	}
 }
 
 int Evaluar_Comando(char *comando[5]){
 	
 		// Identifica si el comando ingresado es una ruta absoluta, una ruta relativa o un comando.
-		
-		if(!strncmp(comando[0],"/",1))
-		{
-			printf("%s***************",comando[0]);
-			return 1;
-		}
+		if (!strncmp(comando[0],"cd",2)){
+			return 4;
+			}
 		else{
-			if(!strncmp(comando[0],".",1)){
-				return 2;
-			}else return 3;
-		}
+			if (!strncmp(comando[0],"exit",4)){
+				exit(0);
+				}
+				else{
+					if(!strncmp(comando[0],"/",1))
+						{
+						printf("%s***************",comando[0]);
+						return 1;
+						}
+					else{
+						if(!strncmp(comando[0],".",1)){
+						return 2;
+						}else return 3;
+						}
+					}
+			}
 }
 
 void Atender_Ruta_Relativa(char comando[5]){
