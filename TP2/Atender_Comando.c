@@ -1,7 +1,7 @@
 
 #include "AtenderRutas.c"
 
-void Atender_Comando(char* comando[5]){	
+void Atender_Comando(char* comando[ARGUMENTOS]){	
 
 
   
