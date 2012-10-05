@@ -1,13 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <string.h>
-#include <sys/types.h> /* pid_t */
-#include <errno.h>   /* errno */
-#include <wchar.h>
-#define BUFFSIZE 256
 
+#include "AtenderRutas.c"
 
 void Atender_Comando(char* comando[5]){	
 
