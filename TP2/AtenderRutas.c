@@ -7,9 +7,9 @@
 #include <sys/types.h>
 
 #define BUFFSIZE 256
-
-void Atender_Ruta_Absoluta(char *[5]);
-void Atender_Ruta_Relativa(char *[5]);
+#define ARGUMENTOS 10
+void Atender_Ruta_Absoluta(char *[ARGUMENTOS]);
+void Atender_Ruta_Relativa(char *[ARGUMENTOS]);
 
 //int main(int argc, char *argv[]){
 	//strcpy(argv[0],"home/fabio/Escritorio/quepasa/Hola");
@@ -20,7 +20,7 @@ void Atender_Ruta_Relativa(char *[5]);
 	//return 0;
 //}
 
-void Atender_Ruta_Relativa(char *comando[5]){
+void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 	
 	char ruta_relativa[BUFFSIZE];
 	char nueva_ruta [BUFFSIZE];
@@ -80,7 +80,7 @@ void Atender_Ruta_Relativa(char *comando[5]){
 	
 }
 
-void Atender_Ruta_Absoluta(char *comando[5]){
+void Atender_Ruta_Absoluta(char *comando[ARGUMENTOS]){
 	
 		printf("%s\n\n", *comando);
 		if(execv(comando[0], comando) == -1)
