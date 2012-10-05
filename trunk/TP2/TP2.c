@@ -38,7 +38,7 @@ void Creador_Prompt(){
 	char user1[size];
 	strncpy(user1,user,size);
 	strcat(user1,hostname);
-	printf("\n%s@%s  %s ",user,hostname,getcwd(NULL,0));
+	printf("\n%s@%s*%s--baash> ",user,hostname,getcwd(NULL,0));
 }
 
 
@@ -134,15 +134,15 @@ int Evaluar_Comando(char *comando[ARGUMENTOS]){
 				exit(0);
 				}
 				else{
-					if(!strncmp(comando[0],"/",1))
+					if(!strncmp(comando[0],"/",1))//camino absoluto
 						{
 						//printf("%s***************",comando[0]);
 						return 1;
 						}
 					else{
-						if(!strncmp(comando[0],".",1)){
+						if((!strncmp(comando[0],".",1))||ComprobarRutaRelativa(comando)){//camino relativo
 						return 2;
-						}else return 3;
+						}else return 3;//comando
 						}
 					}
 			}
