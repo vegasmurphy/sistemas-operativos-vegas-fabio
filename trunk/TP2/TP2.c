@@ -77,7 +77,13 @@ void Verificar_Comando_Ingresado(char *comando[5])
 	valor = Evaluar_Comando(comando);
 	//printf("valor: %i\n",valor);
 	//printf("evaluar ok");
-	
+	if(valor==4){Realizar_cd(comando);}
+	else{
+	pid_t pID = vfork();
+
+   if (pID == 0)                // child
+
+   {
 	switch (valor){
 		case 1:
 			Atender_Ruta_Absoluta(comando);
@@ -88,9 +94,32 @@ void Verificar_Comando_Ingresado(char *comando[5])
 		case 3:
 			Atender_Comando(comando);
 			break;
-		case 4:
-			Realizar_cd(comando);
-			break;
+		}
+	}
+	else if (pID < 0)            // failed to fork
+
+    {
+
+        
+
+        exit(1);
+
+        // Throw exception
+
+    }
+
+    else                                   // parent
+
+    {
+		wait(0);
+      // Code only executed by parent process
+
+ 
+
+      
+
+	}	
+
 	}
 }
 
