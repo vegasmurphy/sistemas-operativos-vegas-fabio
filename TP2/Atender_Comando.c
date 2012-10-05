@@ -4,14 +4,7 @@
 void Atender_Comando(char* comando[5]){	
 
 
-   pid_t pID = vfork();
-
-   if (pID == 0)                // child
-
-   {
-
-      // Code only executed by child process
-		//printf("llego");
+  
 	char *path;
 	int i=0;
 	path=getenv("PATH");
@@ -42,37 +35,9 @@ void Atender_Comando(char* comando[5]){
 		}
 		
 
-      
      
 
-      exit(0);
-
-    }
-
-    else if (pID < 0)            // failed to fork
-
-    {
-
-        
-
-        exit(1);
-
-        // Throw exception
-
-    }
-
-    else                                   // parent
-
-    {
-		wait(0);
-      // Code only executed by parent process
-
- 
-
-      
-
-	}	
-
+    
 
 
 
