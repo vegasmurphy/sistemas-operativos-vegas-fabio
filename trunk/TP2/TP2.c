@@ -7,11 +7,12 @@ int Evaluar_Comando(char* [5]);
 void Atender_Ruta_Absoluta(char* [5]);
 void Atender_Ruta_Relativa(char* [5]);
 void Atender_Comando(char* [5]);
-
+int cant_arg;
+int flag_ejec_background=1;
 int main(int argc,char *argv[]){
 	int i;
 	char *comando[ARGUMENTOS];
-	printf("%s",getenv("PATH"));
+	//printf("%s",getenv("PATH"));
 		while(1)
 		{		
 			for(i=0;i<ARGUMENTOS;i++)comando[i]=NULL;
@@ -60,6 +61,8 @@ void Ingresar_Comando(char *comando[ARGUMENTOS])
 		comando[i]= t1;
 		i++;
 	}	
+	//printf("%i",i);
+	cant_arg=i;
 	//for (j=i;j<5;j++) comando[j]=NULL;
 	while(h<i){
 		//printf("%i  --------   %s\n", h, comando[h]);
@@ -73,13 +76,13 @@ void Verificar_Comando_Ingresado(char *comando[ARGUMENTOS])
 {
 	// Crea un proceso hijo para realizar la busqueda y ejecucion del comando ingresado
 	//printf("llego verificar");
-	int valor;
+	int valor,status;
 	valor = Evaluar_Comando(comando);
 	//printf("valor: %i\n",valor);
 	//printf("evaluar ok");
 	if(valor==4){Realizar_cd(comando);}
 	else{
-	pid_t pID = vfork();
+	pid_t pID = fork();
 
    if (pID == 0)                // child
 
@@ -110,11 +113,14 @@ void Verificar_Comando_Ingresado(char *comando[ARGUMENTOS])
 
     else                                   // parent
 
-    {
-		wait(0);
+    {	if(flag_ejec_background){
+		waitpid(pID, &status, 0);
+		printf("ejecuta wait");
+		}
+     flag_ejec_background=1;
       // Code only executed by parent process
 
- 
+	printf("%i",flag_ejec_background);
 
       
 
@@ -126,6 +132,13 @@ void Verificar_Comando_Ingresado(char *comando[ARGUMENTOS])
 int Evaluar_Comando(char *comando[ARGUMENTOS]){
 	//printf("llego evaluar");
 		// Identifica si el comando ingresado es una ruta absoluta, una ruta relativa o un comando.
+		
+		if(!strncmp(comando[cant_arg-1],"&",1)){
+			flag_ejec_background=0;
+			comando[cant_arg-1]=NULL;
+			}
+		
+		
 		if(comando[0]==NULL){return -1;}
 		if (!strncmp(comando[0],"cd",2)){
 			return 4;
