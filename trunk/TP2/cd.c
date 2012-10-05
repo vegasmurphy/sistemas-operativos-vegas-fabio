@@ -1,5 +1,5 @@
 #include "Atender_Comando.c"
-void Realizar_cd(char* comandos[5]){
+void Realizar_cd(char* comandos[ARGUMENTOS]){
 	if(!strncmp(comandos[1],"/",1)){
 		//printf("ruta antes: %s \n",getcwd(NULL,0));
 		if(chdir(comandos[1])){printf("ruta no encontrada \n");}
