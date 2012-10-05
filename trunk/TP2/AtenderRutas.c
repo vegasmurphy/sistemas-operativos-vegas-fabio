@@ -66,6 +66,7 @@ void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 	
 	if(execv(nueva_ruta, comando) == -1){
 		printf("Error: La ruta relativa ingresada es invalida\n");
+		exit(0);
 		return;
 	}
 	
@@ -76,7 +77,8 @@ void Atender_Ruta_Absoluta(char *comando[ARGUMENTOS]){
 		printf("%s\n\n", *comando);
 		if(execv(comando[0], comando) == -1)
 		{
-			printf("Error\n");
+			printf("Error: Ruta Invalida\n");
+			exit(0);
 		}
-		printf("Termine\n");
+		//printf("Termine\n");
 }
