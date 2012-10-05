@@ -31,7 +31,7 @@ void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 			
 		int largo;
 		getcwd(Dir_Actual,BUFFSIZE);
-		printf("%s\n",Dir_Actual);
+		//printf("%s\n",Dir_Actual);
 
 		largo=strlen(Dir_Actual);
 		
@@ -74,7 +74,7 @@ void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 
 void Atender_Ruta_Absoluta(char *comando[ARGUMENTOS]){
 	
-		printf("%s\n\n", *comando);
+		//printf("%s\n\n", *comando);
 		if(execv(comando[0], comando) == -1)
 		{
 			printf("Error: Ruta Invalida\n");
