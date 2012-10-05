@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <string.h>
-#include <sys/types.h> /* pid_t */
-#include <errno.h>   /* errno */
-#include <wchar.h>
-#define BUFFSIZE 256
+#include "Atender_Comando.c"
 void Realizar_cd(char* comandos[5]){
 	if(!strncmp(comandos[1],"/",1)){
 		//printf("ruta antes: %s \n",getcwd(NULL,0));
