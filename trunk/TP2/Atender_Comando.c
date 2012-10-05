@@ -5,9 +5,12 @@ void Atender_Comando(char* comando[ARGUMENTOS]){
 
 
   
-	char *path;
+	char path[BUFFSIZE],*temp;
 	int i=0;
-	path=getenv("PATH");
+	int j;
+	for(j=0;j<BUFFSIZE;j++) path[j]='\0';
+	temp=getenv("PATH");
+	strcpy(path,temp);
 	int flag=0;
 	while((path[i]!='\0')||(flag==1)) {
 		if(path[i]==':'){
@@ -20,11 +23,7 @@ void Atender_Comando(char* comando[ARGUMENTOS]){
 			strcat(temp,comando[0]);
 			//printf("%s\n",temp);
 
-			if(execv(temp,comando)!=-1){
-				flag=1;
-				//printf("se ejecuto\n");
-				break;
-				}
+			execv(temp,comando);
 			strcpy(path,path+i+1);
 			//printf("%s\n",path);
 			i=0;
@@ -32,9 +31,9 @@ void Atender_Comando(char* comando[ARGUMENTOS]){
 		i++;
 		
 		
-		}
-		
-
+	}
+	printf("Error: Comando no Valido");
+	exit(0);
      
 
     
