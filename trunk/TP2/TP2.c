@@ -10,11 +10,11 @@ void Atender_Comando(char* [5]);
 
 int main(int argc,char *argv[]){
 	int i;
-	char *comando[5];
+	char *comando[ARGUMENTOS];
 	printf("%s",getenv("PATH"));
 		while(1)
 		{		
-			for(i=0;i<5;i++)comando[i]=NULL;
+			for(i=0;i<ARGUMENTOS;i++)comando[i]=NULL;
 			Creador_Prompt();
 			Ingresar_Comando(comando);
 			//printf("%s %s ----------",argv[0],argv[1]);
@@ -42,7 +42,7 @@ void Creador_Prompt(){
 }
 
 
-void Ingresar_Comando(char *comando[5])
+void Ingresar_Comando(char *comando[ARGUMENTOS])
 {		
 	//obtencion de comando y argumentos almacenados en 'comando'
 	
@@ -69,7 +69,7 @@ void Ingresar_Comando(char *comando[5])
 	Verificar_Comando_Ingresado(comando);
 }
 
-void Verificar_Comando_Ingresado(char *comando[5])
+void Verificar_Comando_Ingresado(char *comando[ARGUMENTOS])
 {
 	// Crea un proceso hijo para realizar la busqueda y ejecucion del comando ingresado
 	//printf("llego verificar");
@@ -123,7 +123,7 @@ void Verificar_Comando_Ingresado(char *comando[5])
 	}
 }
 
-int Evaluar_Comando(char *comando[5]){
+int Evaluar_Comando(char *comando[ARGUMENTOS]){
 	//printf("llego evaluar");
 		// Identifica si el comando ingresado es una ruta absoluta, una ruta relativa o un comando.
 		if (!strncmp(comando[0],"cd",2)){
