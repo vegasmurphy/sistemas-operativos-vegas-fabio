@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-
-#define BUFFSIZE 256
-#define ARGUMENTOS 10
+#include "redireccionamiento.c"
 int ComprobarRutaRelativa(char *[ARGUMENTOS]);
 
 //int main(int argc, char *argv[])
