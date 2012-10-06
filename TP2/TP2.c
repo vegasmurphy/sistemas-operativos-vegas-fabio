@@ -138,21 +138,21 @@ void Verificar_Comando_Ingresado(char *comando[ARGUMENTOS])
 int Evaluar_Comando(char *comando[ARGUMENTOS]){
 	//printf("llego evaluar");
 		// Identifica si el comando ingresado es una ruta absoluta, una ruta relativa o un comando.
-		printf("llego");
+		//printf("llego");
 		int i;
 		for(i=0;i<cant_arg;i++){
 			if(!strncmp(comando[i],"|",1)){
-				printf("llego");
+				//printf("llego");
 				return 6;
 				}
 			
 			}
 		
-		
+		if(cant_arg>1){
 		if((!strncmp(comando[cant_arg-2],"<",1))||(!strncmp(comando[cant_arg-2],">",1)))
 			{
 			return 5;
-			}
+			}}
 		
 		
 		if(!strncmp(comando[cant_arg-1],"&",1)){
