@@ -18,14 +18,10 @@ void Atender_Comando(char* comando[ARGUMENTOS]){
 			int j;
 			for(j=0;j<BUFFSIZE;j++) temp[j]='\0';
 			strncpy(temp,path,i);
-			//printf("%s\n",temp);
 			strcat(temp,"/");
 			strcat(temp,comando[0]);
-			//printf("%s\n",temp);
-
 			execv(temp,comando);
 			strcpy(path,path+i+1);
-			//printf("%s\n",path);
 			i=0;
 			}
 		i++;
