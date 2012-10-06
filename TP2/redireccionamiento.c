@@ -1,22 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#define STDOUT_FID 1
-int cant_arg;
-#define STDIN_FID 0
-#define BUFFSIZE 256
-#define ARGUMENTOS 10
-void Atender_Ruta_Absoluta(char* [ARGUMENTOS]);
-void Atender_Ruta_Relativa(char* [ARGUMENTOS]);
-void Atender_Comando(char* [ARGUMENTOS]);
-int Evaluar_Comando(char* [ARGUMENTOS]);
-void Verificar_Comando_Ingresado(char* []);
-
+#include "pipes.c"
 void redireccionamiento(char *comandos[ARGUMENTOS]){
 	//printf("algo");
 	
