@@ -24,7 +24,7 @@ void Realizar_cd(char* comandos[ARGUMENTOS]){
 				strncpy(temp,Dir_Actual,i);
 				//printf("%s\n",temp);
 				if(chdir(temp)){
-				//printf("ruta no encontrada");
+				printf("ruta no encontrada");
 				}
 				//printf("ruta despues: %s \n",getcwd(NULL,0));
 			}
