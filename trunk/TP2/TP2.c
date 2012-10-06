@@ -51,7 +51,7 @@ void Ingresar_Comando(char *comando[ARGUMENTOS])
 	//printf("Ingrese comando\n");
 
 	gets(buffer);
-
+	printf("llego\n");
 
 	
 	for ( t1 = strtok(buffer," "); t1 != NULL; t1 = strtok(NULL, " ") ){
@@ -73,6 +73,7 @@ void Verificar_Comando_Ingresado(char *comando[ARGUMENTOS])
 {
 	// Crea un proceso hijo para realizar la busqueda y ejecucion del comando ingresado
 	//printf("llego verificar");
+	printf("llego\n");
 	int valor,status;
 	valor = Evaluar_Comando(comando);
 	//printf("valor: %i\n",valor);
@@ -98,6 +99,9 @@ void Verificar_Comando_Ingresado(char *comando[ARGUMENTOS])
 		case 5:
 			//printf("entre");
 			redireccionamiento(comando);
+			break;
+		case 6:
+			pipe_process(comando);
 			break;
 		}
 	}
@@ -134,6 +138,16 @@ void Verificar_Comando_Ingresado(char *comando[ARGUMENTOS])
 int Evaluar_Comando(char *comando[ARGUMENTOS]){
 	//printf("llego evaluar");
 		// Identifica si el comando ingresado es una ruta absoluta, una ruta relativa o un comando.
+		printf("llego");
+		int i;
+		for(i=0;i<cant_arg;i++){
+			if(!strncmp(comando[i],"|",1)){
+				printf("llego");
+				return 6;
+				}
+			
+			}
+		
 		
 		if((!strncmp(comando[cant_arg-2],"<",1))||(!strncmp(comando[cant_arg-2],">",1)))
 			{
