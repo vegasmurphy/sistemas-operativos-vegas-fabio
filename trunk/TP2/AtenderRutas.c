@@ -2,14 +2,6 @@
 void Atender_Ruta_Absoluta(char *[ARGUMENTOS]);
 void Atender_Ruta_Relativa(char *[ARGUMENTOS]);
 
-//int main(int argc, char *argv[]){
-	//strcpy(argv[0],"home/fabio/Escritorio/quepasa/Hola");
-	////argv[1]="5";
-	////argv[2] = NULL;
-	//Atender_Ruta_Relativa(argv);
-	
-	//return 0;
-//}
 
 void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 	
@@ -18,7 +10,7 @@ void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 	char Dir_Actual[BUFFSIZE],temp[BUFFSIZE];
 	
 	getcwd(ruta_relativa,BUFFSIZE);
-	//printf("La ruta relativa es %s\n",ruta_relativa);
+
 	
 	if(strncmp(comando[0],"..",2)==0)
 	{
@@ -31,7 +23,6 @@ void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 			
 		int largo;
 		getcwd(Dir_Actual,BUFFSIZE);
-		//printf("%s\n",Dir_Actual);
 
 		largo=strlen(Dir_Actual);
 		
@@ -62,8 +53,6 @@ void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 				}
 				
 	
-	//printf("\nLa ruta relativa es......... %s \n", nueva_ruta);
-	
 	if(execv(nueva_ruta, comando) == -1){
 		printf("Error: La ruta relativa ingresada es invalida\n");
 		exit(0);
@@ -74,11 +63,9 @@ void Atender_Ruta_Relativa(char *comando[ARGUMENTOS]){
 
 void Atender_Ruta_Absoluta(char *comando[ARGUMENTOS]){
 	
-		//printf("%s\n\n", *comando);
 		if(execv(comando[0], comando) == -1)
 		{
 			printf("Error: Ruta Invalida\n");
 			exit(0);
 		}
-		//printf("Termine\n");
 }
