@@ -18,6 +18,36 @@ void Atender_Comando(char* [ARGUMENTOS]);
 int Evaluar_Comando(char* [ARGUMENTOS]);
 void Verificar_Comando_Ingresado(char* []);
 
+void set_read(int* lpipe)
+{
+    dup2(lpipe[0], STDIN_FILENO);
+    close(lpipe[0]); // we have a copy already, so close it
+    close(lpipe[1]); // not using this end
+}
+  
+void set_write(int* rpipe)
+{
+    dup2(rpipe[1], STDOUT_FILENO);
+    close(rpipe[0]); // not using this end
+    close(rpipe[1]); // we have a copy already, so close it
+}
+
+void fork_and_chain(int* lpipe, int* rpipe)
+{
+    if(!fork())
+    {
+        if(lpipe) // there's a pipe from the previous process
+            set_read(lpipe);
+        // else you may want to redirect input from somewhere else for the start
+        if(rpipe) // there's a pipe to the next process
+            set_write(rpipe);
+        // else you may want to redirect out to somewhere else for the end
+
+        // blah do your stuff
+        // and make sure the child process terminates in here
+        // so it won't continue running the chaining code
+    }
+}
 
 void pipe_process(char *comandos[ARGUMENTOS]){
 	printf("entro en la funcion\n");
@@ -34,12 +64,14 @@ void pipe_process(char *comandos[ARGUMENTOS]){
 				char buffer[BUFFSIZE];
 				strcpy(buffer,comandos[i]);
 				comando1[i]=buffer;
+				printf("cmd1 %s\n",buffer);
 				cant_arg1=i;
 				}
 				else{
 					char buffer[BUFFSIZE];
 					strcpy(buffer,comandos[i]);
 					comando2[j]=buffer;
+					printf("cmd2 %s\n",buffer);
 					j++;
 					cant_arg2=j;
 					}
@@ -56,8 +88,9 @@ void pipe_process(char *comandos[ARGUMENTOS]){
         pid_t   childpid;
        // char    string[] = "Hello, world!\n";
         //char    readbuffer[80];
-		//int status;
+		int status;
         pipe(fd);
+       
         
         if((childpid = fork()) == -1)
         {
@@ -73,12 +106,11 @@ void pipe_process(char *comandos[ARGUMENTOS]){
 				
 			printf("hijo\n");
 
-				close(STDOUT_FID); /* stdout def. en stdio.h es un FILE* */
-
-				if (dup(fd[1])<0) { perror("dup"); exit(1); }
-				//printf("hola");
-				close(fd[1]);
-				//	printf("chau");
+				 dup2(fd[1], STDOUT_FILENO);
+				 close(fd[0]); // not using this end
+				close(fd[1]); // we have a copy already, so close it
+				
+					printf("chau");
 				int valor;
 				cant_arg=cant_arg1;
 				printf("antes de evaluar comando\n");
@@ -99,16 +131,16 @@ void pipe_process(char *comandos[ARGUMENTOS]){
         {printf("padre\n");
                 /* Parent process closes up output side of pipe */
                 close(fd[1]);
-				//waitpid(childpid,&status,0);
+				waitpid(childpid,&status,0);
 			//	int fid;
 
 	
-		close(STDIN_FID); /* stdout def. en stdio.h es un FILE* */
-
-		if (dup(fd[0])<0) { perror("dup"); exit(1); }
-			//printf("hola");
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]); // we have a copy already, so close it
+		close(fd[1]); // not using this end
+			printf("holao");
 			close(fd[0]);
-		//	printf("chau");
+			printf("chauo");
 		int valor;
 		cant_arg=cant_arg2;
 		printf("ante ev com\n");
