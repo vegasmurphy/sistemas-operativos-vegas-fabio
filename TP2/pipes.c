@@ -50,7 +50,7 @@ void fork_and_chain(int* lpipe, int* rpipe)
 }
 
 void pipe_process(char *comandos[ARGUMENTOS]){
-	printf("entro en la funcion\n");
+	//printf("entro en la funcion\n");
 	char *comando1[ARGUMENTOS];
 	char *comando2[ARGUMENTOS];
 	int i,j=0;
@@ -64,14 +64,14 @@ void pipe_process(char *comandos[ARGUMENTOS]){
 				char buffer[BUFFSIZE];
 				strcpy(buffer,comandos[i]);
 				comando1[i]=buffer;
-				printf("cmd1 %s\n",buffer);
+				//printf("cmd1 %s\n",buffer);
 				cant_arg1=i;
 				}
 				else{
 					char buffer[BUFFSIZE];
 					strcpy(buffer,comandos[i]);
 					comando2[j]=buffer;
-					printf("cmd2 %s\n",buffer);
+					//printf("cmd2 %s\n",buffer);
 					j++;
 					cant_arg2=j;
 					}
@@ -81,14 +81,14 @@ void pipe_process(char *comandos[ARGUMENTOS]){
 				}
 		}
       
-      printf("paso for\n");
-      
+      //printf("paso for\n");
+   //-----------------------------------------fork y pipes----------------------------------------   
       
         int     fd[2];
         pid_t   childpid;
        // char    string[] = "Hello, world!\n";
         //char    readbuffer[80];
-		int status;
+		//int status;
         pipe(fd);
        
         
@@ -98,24 +98,28 @@ void pipe_process(char *comandos[ARGUMENTOS]){
                 exit(1);
         }
 
-        if(childpid == 0)
+        if(childpid == 0)//proceso hijo
         {
                 /* Child process closes up input side of pipe */
-                close(fd[0]);
+               // close(fd[0]);
 				//int fid;
 				
 			printf("hijo\n");
 
-				 dup2(fd[1], STDOUT_FILENO);
-				 close(fd[0]); // not using this end
-				close(fd[1]); // we have a copy already, so close it
-				
+				 //dup2(fd[1], STDOUT_FILENO);
+				  // we have a copy already, so close it
+				close(STDOUT_FID); /* stdout def. en stdio.h es un FILE* */
+
+				if (dup(fd[1])<0) { perror("dup"); exit(1); }
+				close(fd[0]); // not using this end
+				close(fd[1]);
+					
 					printf("chau");
 				int valor;
 				cant_arg=cant_arg1;
-				printf("antes de evaluar comando\n");
+				//printf("antes de evaluar comando\n");
 				valor=Evaluar_Comando(comando1);
-				printf("Evcom ok\n");
+				//printf("Evcom ok\n");
                 switch (valor){
 				case 1:
 						Atender_Ruta_Absoluta(comando1);
@@ -127,25 +131,33 @@ void pipe_process(char *comandos[ARGUMENTOS]){
 						Atender_Comando(comando1);
 						break;}
         }
-        else
+        else//proceso padre
         {printf("padre\n");
                 /* Parent process closes up output side of pipe */
-                close(fd[1]);
-				waitpid(childpid,&status,0);
+               // close(fd[1]);
+				//waitpid(childpid,&status,0);
 			//	int fid;
 
 	
-		dup2(fd[0], STDIN_FILENO);
+		//dup2(fd[0], STDIN_FILENO);
+		
+		close(STDIN_FID); /* stdout def. en stdio.h es un FILE* */
+
+		if (dup(fd[0])<0) { perror("dup"); exit(1); }
+		
 		close(fd[0]); // we have a copy already, so close it
 		close(fd[1]); // not using this end
+			
+			
+			
 			printf("holao");
 			close(fd[0]);
-			printf("chauo");
+		//	printf("chauo");
 		int valor;
 		cant_arg=cant_arg2;
-		printf("ante ev com\n");
+		//printf("ante ev com %i\n",cant_arg);
 				valor=Evaluar_Comando(comando2);
-				printf("evcom ok\n");
+			//	printf("evcom ok\n");
                 switch (valor){
 				case 1:
 						Atender_Ruta_Absoluta(comando2);
