@@ -148,7 +148,7 @@ int Evaluar_Comando(char *comando[ARGUMENTOS]){
 			return 4;
 			}
 		else{
-			if (!strncmp(comando[0],"exit",4)){
+			if (!strcmp(comando[0],"exit")){
 				exit(0);
 				}
 				else{
